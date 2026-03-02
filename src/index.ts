@@ -9,7 +9,7 @@ export default class PartifulApi {
   }
 
   async getMutuals() {
-    const url = 'https://us-central1-getpartiful.cloudfunctions.net/getMutualsV2';
+    const url = 'https://api.partiful.com/getMutuals';
 
     const response = await fetch(url, {
       method: 'POST',
@@ -28,22 +28,22 @@ export default class PartifulApi {
     return response.json();
   }
 
-  async getUsers(ids: string[], excludePartyStats = false, includePartyStats = true) {
-    const url = 'https://us-central1-getpartiful.cloudfunctions.net/getUsersV2';
+  async getUsers(ids: string[], includePartyStats = false) {
+    const url = 'https://api.partiful.com/getUsers';
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${encodeURIComponent(this.authToken)}`,
+        authorization: `Bearer ${this.authToken}`,
       },
       body: JSON.stringify({
         data: {
           params: {
-            excludePartyStats: excludePartyStats,
             ids: ids,
             includePartyStats: includePartyStats,
           },
+          userId: null,
         },
       }),
     });
@@ -52,13 +52,13 @@ export default class PartifulApi {
   }
 
   async getInvitableContacts(eventId: string, skip = 0, limit = 100) {
-    const url = 'https://us-central1-getpartiful.cloudfunctions.net/getInvitableContactsV2';
+    const url = 'https://api.partiful.com/getInvitableContacts';
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        authorization: `Bearer ${encodeURIComponent(this.authToken)}`,
+        authorization: `Bearer ${this.authToken}`,
       },
       body: JSON.stringify({
         data: {
@@ -79,7 +79,7 @@ export default class PartifulApi {
     statuses = ['APPROVED', 'PENDING_APPROVAL', 'GOING', 'MAYBE', 'WAITLIST', 'DECLINED'],
     questionnaire = true,
   ) {
-    let url = `https://us-central1-getpartiful.cloudfunctions.net/getGuestsCsvV2?eventId=${eventId}&questionnaire=${questionnaire}`;
+    let url = `https://api.partiful.com/getGuestsCsv?eventId=${eventId}&questionnaire=${questionnaire}`;
 
     const allowedStatuses = ['APPROVED', 'PENDING_APPROVAL', 'GOING', 'MAYBE', 'WAITLIST', 'DECLINED'];
 
@@ -92,7 +92,7 @@ export default class PartifulApi {
 
     const response = await fetch(url, {
       headers: {
-        authorization: `Bearer ${encodeURIComponent(this.authToken)}`,
+        authorization: `Bearer ${this.authToken}`,
       },
     });
 
